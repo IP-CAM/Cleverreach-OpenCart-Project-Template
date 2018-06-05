@@ -1,0 +1,9 @@
+/vendor
+/target
+/bin
+/www
+/.idea
+.env
+*~
+composer.lock
+/storage
