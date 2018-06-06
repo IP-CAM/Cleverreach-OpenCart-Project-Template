@@ -14,6 +14,13 @@ class ModelCleverreachCleverreach extends Model
         $this->logger = new Log('cleverreach.log');
     }
 
+    public function addEvents()
+    {
+        $this->db->query("DELETE FROM `" . DB_PREFIX . "event` WHERE `code` LIKE 'cleverreach%'");
+        $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_add', `trigger`='catalog/model/account/customer/addCustomer/after', `action`='cleverreach/cleverreach/addCustomer', `status`='1', `sort_order`='0'");
+        $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_edit', `trigger`='catalog/model/account/customer/editCustomer/after', `action`='cleverreach/cleverreach/editCustomer', `status`='1', `sort_order`='0'");
+    }
+
     public function initRestClient()
     {
         if (!$this->restClient) {

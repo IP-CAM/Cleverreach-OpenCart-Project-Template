@@ -7,8 +7,7 @@ if (file_exists(__DIR__.'/.env')) {
 
 class RoboFile extends \Robo\Tasks
 {
-    use \Robo\Task\Development\loadTasks;
-    use \Robo\Common\TaskIO;
+    // use \Robo\Common\TaskIO;
 
     /**
      * @var array
@@ -69,19 +68,20 @@ class RoboFile extends \Robo\Tasks
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $conn->exec("DROP DATABASE IF EXISTS `" . $this->opencart_config['db_database'] . "`");
             $conn->exec("CREATE DATABASE `" . $this->opencart_config['db_database'] . "`");
+            $conn = null;
+
+            $this->taskExec('php')
+                ->arg('www/install/cli_install.php')
+                ->arg('install')
+                ->options($this->opencart_config)
+                ->run();
+
+            $this->taskDeleteDir('www/install')->run();
         }
         catch(PDOException $e)
         {
-            $this->printTaskError("<error> Could not connect ot database...");
+            $this->say("<error> Error: " . $e->getMessage());
         }
-        $conn = null;
-
-        $install = $this->taskExec('php')->arg('www/install/cli_install.php')->arg('install');
-        foreach ($this->opencart_config as $option => $value) {
-            $install->option($option, $value);
-        }
-        $install->run();
-        $this->taskDeleteDir('www/install')->run();
     }
 
     public function opencartRun()

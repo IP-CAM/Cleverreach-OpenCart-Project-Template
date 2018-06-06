@@ -11,6 +11,7 @@ class ControllerCleverreachCleverreach extends Controller
 
         $this->load->model('setting/setting');
         $this->load->model('cleverreach/cleverreach');
+        $this->model_cleverreach_cleverreach->addEvents();
 
         $data = $this->language->all();
 
