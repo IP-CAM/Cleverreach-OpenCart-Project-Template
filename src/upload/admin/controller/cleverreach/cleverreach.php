@@ -11,7 +11,6 @@ class ControllerCleverreachCleverreach extends Controller
 
         $this->load->model('setting/setting');
         $this->load->model('cleverreach/cleverreach');
-        $this->model_cleverreach_cleverreach->addEvents();
 
         $data = $this->language->all();
 
@@ -46,8 +45,10 @@ class ControllerCleverreachCleverreach extends Controller
         }
 
         if ($this->config->has('cleverreach_token')) {
+            $this->model_cleverreach_cleverreach->addEvents();
             $data['cleverreach_token'] = $this->config->get('cleverreach_token');
             $data['groups'] = $this->model_cleverreach_cleverreach->getGroups();
+            $data['forms'] = $this->model_cleverreach_cleverreach->getForms();
         }
 
         if (isset($this->error['warning'])) {

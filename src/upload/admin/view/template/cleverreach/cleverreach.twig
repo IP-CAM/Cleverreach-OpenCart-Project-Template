@@ -61,6 +61,7 @@
                                     <td class="text-left">{{ entry_store }}</td>
                                     <td class="text-left">{{ entry_language }}</td>
                                     <td class="text-left">{{ entry_group }}</td>
+                                    <td class="text-left">{{ entry_form }}</td>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -69,13 +70,25 @@
                                         <td class="text-left">{{ line.store }}</td>
                                         <td class="text-left">{{ line.language }}</td>
                                         <td class="text-left">
-                                            <select name="cleverreach_lines[{{ line.id }}]" class="form-control">
+                                            <select name="cleverreach_lines[{{ line.id }}][group]" class="form-control">
                                                 <option value="0">---</option>
                                                 {% for group in groups %}
                                                     {% if group.id == line.group %}
                                                         <option value="{{ group.id }}" selected="selected">{{ group.name }}</option>
                                                     {% else %}
                                                         <option value="{{ group.id }}">{{ group.name }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td class="text-left">
+                                            <select name="cleverreach_lines[{{ line.id }}][form]" class="form-control">
+                                                <option value="0">---</option>
+                                                {% for form in forms %}
+                                                    {% if form.id == line.form %}
+                                                        <option value="{{ form.id }}" selected="selected">{{ form.name }}</option>
+                                                    {% else %}
+                                                        <option value="{{ form.id }}">{{ form.name }}</option>
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>

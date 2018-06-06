@@ -9,7 +9,8 @@ $_['entry_client_id'] = 'Client ID';
 $_['entry_client_secret'] = 'Client Secret';
 $_['entry_language'] = 'Language';
 $_['entry_store'] = 'Store';
-$_['entry_group'] = 'Newsletter Group';
+$_['entry_group'] = 'E-Mail List';
+$_['entry_form'] = 'Double Opt-in Form';
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify Cleverreach E-Mail Marketing!';
