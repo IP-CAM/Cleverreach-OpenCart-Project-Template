@@ -98,4 +98,9 @@ class CleverreachRestClient
         return $this->callRestClient('put', '/groups/'. $groupId . '/receivers/' . $email . '/deactivate', []);
     }
 
+    public function upsertReceivers(array $receivers)
+    {
+
+    }
+
 }

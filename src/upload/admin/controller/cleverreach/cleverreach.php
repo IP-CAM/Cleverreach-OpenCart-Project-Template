@@ -16,7 +16,8 @@ class ControllerCleverreachCleverreach extends Controller
 
         if ($this->request->server['REQUEST_METHOD'] == 'POST' && isset($this->request->post['cleverreach_lines']) && $this->validate()) {
             $this->model_setting_setting->editSetting('cleverreach', $this->request->post);
-            $data['success'] = $this->language->get('text_success');
+            $this->session->data['success'] = $this->language->get('text_success');
+            $this->response->redirect($this->url->link('cleverreach/cleverreach', 'user_token=' . $this->session->data['user_token'], true));
 
         } elseif ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate()) {
             $this->model_setting_setting->editSetting('cleverreach', $this->request->post);
@@ -57,6 +58,13 @@ class ControllerCleverreachCleverreach extends Controller
             $data['error_warning'] = '';
         }
 
+        if (isset($this->session->data['success'])) {
+            $data['success'] = $this->session->data['success'];
+            unset($this->session->data['success']);
+        } else {
+            $data['success'] = '';
+        }
+
         $data['breadcrumbs'] = array();
 
         $data['breadcrumbs'][] = array(
@@ -93,7 +101,44 @@ class ControllerCleverreachCleverreach extends Controller
         $this->response->setOutput($this->load->view('cleverreach/cleverreach', $data));
     }
 
-    protected function validate() {
+    public function upsertForm()
+    {
+        $this->load->language('cleverreach/upsert_form');
+        $this->load->model('cleverreach/cleverreach');
+        $data = $this->language->all();
+
+        if ($this->config->has('cleverreach_token')) {
+            $data['groups'] = $this->model_cleverreach_cleverreach->getGroups();
+            $data['action'] = $this->url->link('cleverreach/cleverreach/upsert', 'user_token=' . $this->session->data['user_token'], true);
+
+            $this->response->setOutput($this->load->view('cleverreach/upsert_form', $data));
+        } else {
+            http_response_code(400);
+            $this->response->setOutput('missing cleverreach token');
+        }
+    }
+
+    public function renderCustomerList(&$route, &$data, &$template)
+    {
+        return $this->load->view('cleverreach/customer_list', $data);
+    }
+
+    public function renderColumnLeft(&$route, &$data, &$template)
+    {
+        foreach ($data['menus'] as $idx => $item) {
+            if ($item['id'] == 'menu-marketing') {
+                $data['menus'][$idx]['children'][] = [
+                    'name'	   => 'Cleverreach',
+                    'href'     => $this->url->link('cleverreach/cleverreach', 'user_token=' . $this->session->data['user_token'], true),
+                    'children' => []
+                ];
+                break;
+            }
+        }
+    }
+
+    protected function validate()
+    {
         if (!$this->user->hasPermission('modify', 'cleverreach/cleverreach')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }

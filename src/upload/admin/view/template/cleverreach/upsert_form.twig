@@ -1,0 +1,27 @@
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{ heading_title }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" role="alert">{{ text_help }}</div>
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-cleverreach" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="input-groups">{{ entry_group }}</label>
+                        <select id="input-groups" name="group" class="form-control">
+                            {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ button_cancel }}</button>
+                <button type="submit" form="form-cleverreach" class="btn btn-primary">{{ button_submit }}</button>
+            </div>
+        </div>
+    </div>
+</div>

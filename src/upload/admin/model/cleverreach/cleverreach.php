@@ -21,6 +21,8 @@ class ModelCleverreachCleverreach extends Model
         $this->db->query("DELETE FROM `" . DB_PREFIX . "event` WHERE `code` LIKE 'cleverreach%'");
         $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_add', `trigger`='catalog/model/account/customer/addCustomer/after', `action`='cleverreach/cleverreach/addCustomer', `status`='1', `sort_order`='0'");
         $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_edit', `trigger`='catalog/model/account/customer/editNewsletter/after', `action`='cleverreach/cleverreach/editCustomer', `status`='1', `sort_order`='0'");
+        $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_list', `trigger`='admin/view/customer/customer_list/before', `action`='cleverreach/cleverreach/renderCustomerList', `status`='1', `sort_order`='0'");
+        $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_menu', `trigger`='admin/view/common/column_left/before', `action`='cleverreach/cleverreach/renderColumnLeft', `status`='1', `sort_order`='0'");
     }
 
     public function init()
@@ -83,6 +85,12 @@ class ModelCleverreachCleverreach extends Model
     {
         $this->init();
         return $this->restClient->getForms();
+    }
+
+    public function upsertReceivers(array $receivers)
+    {
+        $this->init();
+        return $this->restClient->upsertReceivers($receivers);
     }
 
     public function getLines()
