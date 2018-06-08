@@ -101,6 +101,23 @@ class ControllerCleverreachCleverreach extends Controller
         $this->response->setOutput($this->load->view('cleverreach/cleverreach', $data));
     }
 
+    public function upsert()
+    {
+        $this->load->language('cleverreach/upsert_form');
+        $this->load->model('cleverreach/cleverreach');
+
+        if ($this->request->server['REQUEST_METHOD'] == 'POST' &&
+            isset($this->request->post['group']) &&
+            isset($this->request->post['customer']) &&
+            is_array($this->request->post['customer'])) {
+
+            $this->model_cleverreach_cleverreach->upsertReceivers($this->request->post['group'], $this->request->post['customer']);
+            $this->session->data['success'] = $this->language->get('text_success');
+        }
+
+        $this->response->redirect($this->url->link('customer/customer', 'user_token=' . $this->session->data['user_token'], true));
+    }
+
     public function upsertForm()
     {
         $this->load->language('cleverreach/upsert_form');
@@ -121,20 +138,6 @@ class ControllerCleverreachCleverreach extends Controller
     public function renderCustomerList(&$route, &$data, &$template)
     {
         return $this->load->view('cleverreach/customer_list', $data);
-    }
-
-    public function renderColumnLeft(&$route, &$data, &$template)
-    {
-        foreach ($data['menus'] as $idx => $item) {
-            if ($item['id'] == 'menu-marketing') {
-                $data['menus'][$idx]['children'][] = [
-                    'name'	   => 'Cleverreach',
-                    'href'     => $this->url->link('cleverreach/cleverreach', 'user_token=' . $this->session->data['user_token'], true),
-                    'children' => []
-                ];
-                break;
-            }
-        }
     }
 
     protected function validate()

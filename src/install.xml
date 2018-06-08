@@ -5,4 +5,18 @@
     <author>Stefan Huber</author>
     <link>https://stefanhuber.at</link>
     <code>stefanhuber-opencart-cleverreach</code>
+
+    <file path="admin/controller/common/column_left.php">
+        <operation>
+            <search><![CDATA[if ($marketing) {]]></search>
+            <add position="before"><![CDATA[
+                $marketing[] = [
+					'name'	   => 'Cleverreach',
+					'href'     => $this->url->link('cleverreach/cleverreach', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => []
+				];
+            ]]></add>
+        </operation>
+    </file>
+
 </modification>

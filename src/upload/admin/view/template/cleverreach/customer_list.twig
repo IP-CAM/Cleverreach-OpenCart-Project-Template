@@ -20,7 +20,7 @@
                                     success : function(result) {
                                         $('#cleverreach-modal-holder').html(result);
                                         for (var i = 0; i < idItems.length; i++) {
-                                            $('#cleverreach-modal-holder form').append('<input type="hidden" name="customer" value="' + idItems[i].value + '" />');
+                                            $('#cleverreach-modal-holder form').append('<input type="hidden" name="customer[]" value="' + idItems[i].value + '" />');
                                         }
                                         $('#cleverreach-modal-holder > div').modal();
                                     }

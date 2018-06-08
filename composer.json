@@ -2,7 +2,7 @@
     "name": "stefanhuber.at/opencart-cleverreach",
     "description": "Opencart Cleverreach Extension",
     "license": "GPL-3.0",
-    "type": "project",
+    "type": "opencart-extension",
     "authors": [
         {
             "name": "stefanhuber",
@@ -14,11 +14,31 @@
       "vlucas/phpdotenv": "~1.1.0",
       "consolidation/robo": "~1"
     },
+    "require": {
+      "beyondit/opencart-extension-installer": "*"
+    },
     "config": {
       "bin-dir": "bin/",
       "preferred-install": "source"
     },
     "extra": {
-      "opencart-dir" : "www"
+      "opencart-dir" : "www" ,
+      "src-dir" : "src/upload",
+      "mappings" : [
+        "admin/controller/cleverreach/cleverreach.php",
+        "admin/model/cleverreach/cleverreach.php",
+        "admin/language/en-gb/cleverreach/cleverreach.php",
+        "admin/language/en-gb/cleverreach/upsert_form.php",
+        "admin/view/template/cleverreach/cleverreach.twig",
+        "admin/view/template/cleverreach/customer_list.twig",
+        "admin/view/template/cleverreach/upsert_form.twig",
+        "catalog/controller/cleverreach/cleverreach.php",
+        "catalog/model/cleverreach/cleverreach.php",
+        "system/library/cleverreach/cleverreach.php",
+        "system/library/cleverreach/rest.php"
+      ],
+      "installers" : {
+        "xml" : "src/install.xml"
+      }
     }
 }

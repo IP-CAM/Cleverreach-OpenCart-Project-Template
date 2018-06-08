@@ -12,8 +12,14 @@ class ModelCleverreachCleverreach extends Model
      */
     protected $restClient;
 
+    /**
+     * @var Log
+     */
+    protected $logger;
+
     public function __construct($registry) {
         parent::__construct($registry);
+        $this->logger = new Log('cleverreach.log');
     }
 
     public function addEvents()
@@ -22,7 +28,6 @@ class ModelCleverreachCleverreach extends Model
         $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_add', `trigger`='catalog/model/account/customer/addCustomer/after', `action`='cleverreach/cleverreach/addCustomer', `status`='1', `sort_order`='0'");
         $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_edit', `trigger`='catalog/model/account/customer/editNewsletter/after', `action`='cleverreach/cleverreach/editCustomer', `status`='1', `sort_order`='0'");
         $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_customer_list', `trigger`='admin/view/customer/customer_list/before', `action`='cleverreach/cleverreach/renderCustomerList', `status`='1', `sort_order`='0'");
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "event` SET `code`='cleverreach_menu', `trigger`='admin/view/common/column_left/before', `action`='cleverreach/cleverreach/renderColumnLeft', `status`='1', `sort_order`='0'");
     }
 
     public function init()
@@ -87,10 +92,22 @@ class ModelCleverreachCleverreach extends Model
         return $this->restClient->getForms();
     }
 
-    public function upsertReceivers(array $receivers)
+    public function upsertReceivers($groupId, array $customerIds)
     {
         $this->init();
-        return $this->restClient->upsertReceivers($receivers);
+        $receivers = [];
+
+        $this->load->model('customer/customer');
+        foreach ($customerIds as $customerId) {
+            $customer = $this->model_customer_customer->getCustomer($customerId);
+
+            $receivers[] = $this->restClient->prepareReceiver($customer['email'], [
+                'firstname' => $customer['firstname'] ,
+                'lastname'  => $customer['lastname']
+            ], time());
+        }
+
+        return $this->restClient->upsertReceivers($groupId, $receivers);
     }
 
     public function getLines()

@@ -66,13 +66,7 @@ class CleverreachRestClient
 
     public function addReceiver($groupId, $formId, $email, array $attributes = [])
     {
-        $result = $this->callRestClient('post', '/groups/'. $groupId . '/receivers', [
-            'email'      => $email ,
-            'registered' => time() ,
-            'activated'  => 0 ,
-            'source'     => 'OpenCart' ,
-            'global_attributes' => $attributes
-        ]);
+        $result = $this->callRestClient('post', '/groups/'. $groupId . '/receivers', $this->prepareReceiver($email, $attributes));
 
         if ($result) {
             $result = $this->activateReceiver($formId, $email);
@@ -98,9 +92,20 @@ class CleverreachRestClient
         return $this->callRestClient('put', '/groups/'. $groupId . '/receivers/' . $email . '/deactivate', []);
     }
 
-    public function upsertReceivers(array $receivers)
+    public function upsertReceivers($groupId, array $receivers)
     {
+        return $this->callRestClient('post', '/groups/'. $groupId . '/receivers/upsert', $receivers);
+    }
 
+    public function prepareReceiver($email, $globalAttributes, $activated = 0)
+    {
+        return [
+            'email'      => $email ,
+            'registered' => time() ,
+            'activated'  => $activated ,
+            'source'     => 'OpenCart' ,
+            'global_attributes' => $globalAttributes
+        ];
     }
 
 }
