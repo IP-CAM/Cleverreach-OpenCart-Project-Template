@@ -64,26 +64,26 @@ class CleverreachRestClient
         return $this->callRestClient('get', '/forms');
     }
 
-    public function addReceiver($groupId, $formId, $email, array $attributes = [])
+    public function addReceiver($groupId, $formId, $email, array $attributes = [], array $doiData = null)
     {
         $result = $this->callRestClient('post', '/groups/'. $groupId . '/receivers', $this->prepareReceiver($email, $attributes));
 
         if ($result) {
-            $result = $this->activateReceiver($formId, $email);
+            $result = $this->activateReceiver($formId, $email, $doiData);
         }
 
         return $result;
     }
 
-    public function activateReceiver($formId, $email)
+    public function activateReceiver($formId, $email, array $doiData = null)
     {
         return $this->callRestClient('post', '/forms/'. $formId . '/send/activate', [
             'email' => $email ,
-            'doidata' => [
+            'doidata' => ($doiData ? $doiData : [
                 "user_ip"    => $_SERVER["REMOTE_ADDR"],
                 "referer"    => $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"],
                 "user_agent" => $_SERVER["HTTP_USER_AGENT"]
-            ]
+            ])
         ]);
     }
 
