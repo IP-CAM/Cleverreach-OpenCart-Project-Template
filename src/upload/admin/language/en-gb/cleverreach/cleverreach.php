@@ -19,3 +19,4 @@ $_['error_token'] = 'Error: A Cleverreach access token cannot be obtained. Pleas
 // Success
 $_['text_success'] = 'Success: You have modified Cleverreach E-Mail Marketing!';
 $_['text_success_token'] = 'Success: You have successfully obtained a Cleverreach token, OpenCart is now connected to Cleverreach E-Mail Marketing!';
+$_['text_success_clear'] = 'Success: All Cleverreach Data was cleared!';

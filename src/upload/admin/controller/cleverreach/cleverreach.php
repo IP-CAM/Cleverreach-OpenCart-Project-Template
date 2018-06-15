@@ -14,7 +14,11 @@ class ControllerCleverreachCleverreach extends Controller
 
         $data = $this->language->all();
 
-        if ($this->request->server['REQUEST_METHOD'] == 'POST' && isset($this->request->post['cleverreach_lines']) && $this->validate()) {
+        if ($this->request->server['REQUEST_METHOD'] == 'POST' && isset($this->request->post['clear'])) {
+            $this->model_setting_setting->deleteSetting('cleverreach');
+            $this->session->data['success'] = $this->language->get('text_success_clear');
+            $this->response->redirect($this->url->link('cleverreach/cleverreach', 'user_token=' . $this->session->data['user_token'], true));
+        } else if ($this->request->server['REQUEST_METHOD'] == 'POST' && isset($this->request->post['cleverreach_lines']) && $this->validate()) {
             $this->model_setting_setting->editSetting('cleverreach', $this->request->post);
             $this->session->data['success'] = $this->language->get('text_success');
             $this->response->redirect($this->url->link('cleverreach/cleverreach', 'user_token=' . $this->session->data['user_token'], true));
